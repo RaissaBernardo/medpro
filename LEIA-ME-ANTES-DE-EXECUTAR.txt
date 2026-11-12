@@ -1,0 +1,28 @@
+MEDPRO - Exercicios 3 e 4 (Medicos e Pacientes)
+
+CORRECAO DO ERRO 500 - Table medpro_api.medicos doesn't exist
+
+1. Pare o Spring Boot no VS Code.
+2. Extraia ESTE ZIP em uma pasta nova, e abra a pasta medpro completa no VS Code.
+   Nao copie so as classes Java: e indispensavel copiar src/main/resources/db/migration.
+3. Confira se o banco medpro_api ja existe no MySQL. Se nao existir, execute:
+   CREATE DATABASE medpro_api;
+4. Ajuste somente a senha do seu MySQL em src/main/resources/application.properties, se necessario.
+5. Rode no terminal do projeto:
+   No Windows: .\mvnw.cmd clean spring-boot:run
+   No Linux/Mac: ./mvnw clean spring-boot:run
+6. No MySQL Workbench, verifique:
+   USE medpro_api;
+   SHOW TABLES;
+   SELECT version, description, success FROM flyway_schema_history;
+
+Resultado esperado: tabelas medicos, pacientes, flyway_schema_history e 5 migrations aplicadas.
+Nao apague o banco nem a tabela de historico do Flyway.
+
+Rotas do Insomnia:
+POST /medicos ou /pacientes - cadastro
+GET /medicos ou /pacientes - listagem de registros ativos
+PUT /medicos ou /pacientes - atualizacao (JSON com id)
+DELETE /medicos/{id} ou /pacientes/{id} - exclusao logica
+
+Pacientes: por padrao, listagem paginada de 10 em 10, ordenada por nome.
