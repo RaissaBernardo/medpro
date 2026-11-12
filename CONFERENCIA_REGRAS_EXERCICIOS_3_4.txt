@@ -1,0 +1,46 @@
+CONFERENCIA DAS REGRAS - EXERCICIOS 3 E 4
+
+LISTAGEM MEDICOS: GET /medicos
+- Campos: id, nome, email, crm e especialidade (id adicional conforme slide 33)
+- Ordenacao crescente por nome, 10 registros por pagina como padrao
+- Somente medicos ativos
+
+LISTAGEM PACIENTES: GET /pacientes
+- Campos: id, nome, email e cpf (id adicional para permitir atualizacao)
+- Ordenacao crescente por nome, 10 registros por pagina como padrao
+- Somente pacientes ativos
+
+ATUALIZACAO MEDICOS: PUT /medicos
+- Aceita somente id, nome, telefone e endereco
+- Nao altera email, CRM ou especialidade
+
+ATUALIZACAO PACIENTES: PUT /pacientes
+- Aceita somente id, nome, telefone e endereco
+- Nao altera email ou CPF
+
+EXCLUSAO LOGICA: DELETE /medicos/{id} e DELETE /pacientes/{id}
+- Marca ativo=false sem apagar registro no banco de dados
+
+TESTES MANUAIS NO INSOMNIA
+GET http://localhost:8080/medicos
+GET http://localhost:8080/pacientes
+GET http://localhost:8080/medicos?size=10&sort=nome
+GET http://localhost:8080/pacientes?size=10&sort=nome
+
+PUT http://localhost:8080/pacientes
+{ "id": 2, "nome": "Ana Carolina Atualizada", "telefone": "16999999999", "endereco": { "rua": "Rua Nova" } }
+
+PUT http://localhost:8080/medicos
+{ "id": 1, "nome": "Medico Atualizado", "telefone": "16999999999", "endereco": { "rua": "Rua Nova" } }
+
+DELETE http://localhost:8080/pacientes/2
+DELETE http://localhost:8080/medicos/1
+
+SQL PARA CONFERIR INATIVACAO:
+SELECT id, nome, ativo FROM pacientes;
+SELECT id, nome, ativo FROM medicos;
+
+OBSERVACOES:
+- Os exemplos de id devem ser substituidos por registros existentes.
+- Os endpoints preservam o padrao dos slides do professor.
+- Este projeto nao foi executado contra o seu MySQL neste ambiente; teste no computador local.
