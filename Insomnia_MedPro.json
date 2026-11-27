@@ -1,0 +1,664 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2026-11-26T00:00:00.000Z",
+  "__export_source": "insomnia.desktop.app:v2026",
+  "resources": [
+    {
+      "_id": "wrk_medpro",
+      "_type": "workspace",
+      "name": "MedPro — API REST 2 e 3",
+      "scope": "collection",
+      "parentId": null,
+      "created": 1795735500703,
+      "modified": 1795735500703
+    },
+    {
+      "_id": "env_medpro",
+      "_type": "environment",
+      "name": "Base Environment",
+      "parentId": "wrk_medpro",
+      "data": {
+        "base_url": "http://localhost:8080",
+        "token": "",
+        "token_invalido": "token-invalido",
+        "medico_id": 1,
+        "paciente_id": 1
+      },
+      "created": 1795735500703,
+      "modified": 1795735500703
+    },
+    {
+      "_id": "fld_login",
+      "_type": "request_group",
+      "parentId": "wrk_medpro",
+      "name": "01 — Autenticação",
+      "created": 1795735500703,
+      "modified": 1795735500703
+    },
+    {
+      "_id": "req_medpro_3",
+      "_type": "request",
+      "parentId": "fld_login",
+      "name": "Login (200)",
+      "method": "POST",
+      "url": "{{ _.base_url }}/login",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"login\": \"andre.roberto@medpro.com\",\n  \"senha\": \"123456\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "parameters": [],
+      "description": "Copie o token para a variável token do ambiente.",
+      "created": 1795735500703,
+      "modified": 1795735500703,
+      "metaSortKey": 3000
+    },
+    {
+      "_id": "req_medpro_4",
+      "_type": "request",
+      "parentId": "fld_login",
+      "name": "Senha incorreta (401)",
+      "method": "POST",
+      "url": "{{ _.base_url }}/login",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"login\": \"andre.roberto@medpro.com\",\n  \"senha\": \"errada\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "parameters": [],
+      "description": "",
+      "created": 1795735500703,
+      "modified": 1795735500703,
+      "metaSortKey": 4000
+    },
+    {
+      "_id": "req_medpro_5",
+      "_type": "request",
+      "parentId": "fld_login",
+      "name": "Usuário inexistente (401)",
+      "method": "POST",
+      "url": "{{ _.base_url }}/login",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"login\": \"inexistente@medpro.com\",\n  \"senha\": \"123456\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "parameters": [],
+      "description": "",
+      "created": 1795735500703,
+      "modified": 1795735500703,
+      "metaSortKey": 5000
+    },
+    {
+      "_id": "fld_medicos",
+      "_type": "request_group",
+      "parentId": "wrk_medpro",
+      "name": "02 — Médicos",
+      "created": 1795735500703,
+      "modified": 1795735500703
+    },
+    {
+      "_id": "req_medpro_7",
+      "_type": "request",
+      "parentId": "fld_medicos",
+      "name": "Cadastrar (201 + Location)",
+      "method": "POST",
+      "url": "{{ _.base_url }}/medicos",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"nome\": \"Medico Teste\",\n  \"email\": \"medico.teste@medpro.com\",\n  \"crm\": \"123456\",\n  \"especialidade\": \"ORTOPEDIA\",\n  \"telefone\": \"16999999999\",\n  \"endereco\": {\n    \"logradouro\": \"Rua 1\",\n    \"bairro\": \"Centro\",\n    \"cep\": \"12345678\",\n    \"cidade\": \"São Carlos\",\n    \"uf\": \"SP\",\n    \"numero\": \"1\",\n    \"complemento\": \"Sala 1\"\n  }\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}",
+        "prefix": "Bearer"
+      },
+      "parameters": [],
+      "description": "Ajuste o ID no ambiente; use email/CRM/CPF inéditos ao repetir.",
+      "created": 1795735500703,
+      "modified": 1795735500703,
+      "metaSortKey": 7000
+    },
+    {
+      "_id": "req_medpro_8",
+      "_type": "request",
+      "parentId": "fld_medicos",
+      "name": "Listar ativos (200)",
+      "method": "GET",
+      "url": "{{ _.base_url }}/medicos",
+      "body": {},
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}",
+        "prefix": "Bearer"
+      },
+      "parameters": [],
+      "description": "",
+      "created": 1795735500703,
+      "modified": 1795735500703,
+      "metaSortKey": 8000
+    },
+    {
+      "_id": "req_medpro_9",
+      "_type": "request",
+      "parentId": "fld_medicos",
+      "name": "Paginar e ordenar (200)",
+      "method": "GET",
+      "url": "{{ _.base_url }}/medicos?size=1&page=0&sort=nome,desc",
+      "body": {},
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}",
+        "prefix": "Bearer"
+      },
+      "parameters": [],
+      "description": "",
+      "created": 1795735500703,
+      "modified": 1795735500703,
+      "metaSortKey": 9000
+    },
+    {
+      "_id": "req_medpro_10",
+      "_type": "request",
+      "parentId": "fld_medicos",
+      "name": "Detalhar (200)",
+      "method": "GET",
+      "url": "{{ _.base_url }}/medicos/{{ _.medico_id }}",
+      "body": {},
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}",
+        "prefix": "Bearer"
+      },
+      "parameters": [],
+      "description": "",
+      "created": 1795735500703,
+      "modified": 1795735500703,
+      "metaSortKey": 10000
+    },
+    {
+      "_id": "req_medpro_11",
+      "_type": "request",
+      "parentId": "fld_medicos",
+      "name": "Atualizar (200)",
+      "method": "PUT",
+      "url": "{{ _.base_url }}/medicos",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"id\": 1,\n  \"nome\": \"Nome Atualizado\",\n  \"telefone\": \"16988888888\",\n  \"endereco\": {\n    \"logradouro\": \"Rua Nova\"\n  }\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}",
+        "prefix": "Bearer"
+      },
+      "parameters": [],
+      "description": "Substitua id pelo ID real antes de executar.",
+      "created": 1795735500703,
+      "modified": 1795735500703,
+      "metaSortKey": 11000
+    },
+    {
+      "_id": "req_medpro_12",
+      "_type": "request",
+      "parentId": "fld_medicos",
+      "name": "ID inexistente (404)",
+      "method": "GET",
+      "url": "{{ _.base_url }}/medicos/999999999",
+      "body": {},
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}",
+        "prefix": "Bearer"
+      },
+      "parameters": [],
+      "description": "",
+      "created": 1795735500703,
+      "modified": 1795735500703,
+      "metaSortKey": 12000
+    },
+    {
+      "_id": "req_medpro_13",
+      "_type": "request",
+      "parentId": "fld_medicos",
+      "name": "Cadastro inválido (400)",
+      "method": "POST",
+      "url": "{{ _.base_url }}/medicos",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"nome\": \"\",\n  \"email\": \"medico.teste@medpro.com\",\n  \"crm\": \"123456\",\n  \"especialidade\": \"ORTOPEDIA\",\n  \"telefone\": \"16999999999\",\n  \"endereco\": {\n    \"logradouro\": \"Rua 1\",\n    \"bairro\": \"Centro\",\n    \"cep\": \"invalido\",\n    \"cidade\": \"São Carlos\",\n    \"uf\": \"SP\",\n    \"numero\": \"1\",\n    \"complemento\": \"Sala 1\"\n  }\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}",
+        "prefix": "Bearer"
+      },
+      "parameters": [],
+      "description": "",
+      "created": 1795735500703,
+      "modified": 1795735500703,
+      "metaSortKey": 13000
+    },
+    {
+      "_id": "req_medpro_14",
+      "_type": "request",
+      "parentId": "fld_medicos",
+      "name": "Atualização inválida (400)",
+      "method": "PUT",
+      "url": "{{ _.base_url }}/medicos",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"id\": 1,\n  \"nome\": \"\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}",
+        "prefix": "Bearer"
+      },
+      "parameters": [],
+      "description": "Use o ID real.",
+      "created": 1795735500703,
+      "modified": 1795735500703,
+      "metaSortKey": 14000
+    },
+    {
+      "_id": "req_medpro_15",
+      "_type": "request",
+      "parentId": "fld_medicos",
+      "name": "Sem token (401)",
+      "method": "GET",
+      "url": "{{ _.base_url }}/medicos",
+      "body": {},
+      "headers": [],
+      "authentication": {},
+      "parameters": [],
+      "description": "",
+      "created": 1795735500703,
+      "modified": 1795735500703,
+      "metaSortKey": 15000
+    },
+    {
+      "_id": "req_medpro_16",
+      "_type": "request",
+      "parentId": "fld_medicos",
+      "name": "Token inválido (401)",
+      "method": "GET",
+      "url": "{{ _.base_url }}/medicos",
+      "body": {},
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token_invalido }}",
+        "prefix": "Bearer"
+      },
+      "parameters": [],
+      "description": "",
+      "created": 1795735500703,
+      "modified": 1795735500703,
+      "metaSortKey": 16000
+    },
+    {
+      "_id": "req_medpro_17",
+      "_type": "request",
+      "parentId": "fld_medicos",
+      "name": "Excluir (204)",
+      "method": "DELETE",
+      "url": "{{ _.base_url }}/medicos/{{ _.medico_id }}",
+      "body": {},
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}",
+        "prefix": "Bearer"
+      },
+      "parameters": [],
+      "description": "",
+      "created": 1795735500703,
+      "modified": 1795735500703,
+      "metaSortKey": 17000
+    },
+    {
+      "_id": "req_medpro_18",
+      "_type": "request",
+      "parentId": "fld_medicos",
+      "name": "Listar após exclusão (200)",
+      "method": "GET",
+      "url": "{{ _.base_url }}/medicos",
+      "body": {},
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}",
+        "prefix": "Bearer"
+      },
+      "parameters": [],
+      "description": "",
+      "created": 1795735500703,
+      "modified": 1795735500703,
+      "metaSortKey": 18000
+    },
+    {
+      "_id": "fld_pacientes",
+      "_type": "request_group",
+      "parentId": "wrk_medpro",
+      "name": "03 — Pacientes",
+      "created": 1795735500703,
+      "modified": 1795735500703
+    },
+    {
+      "_id": "req_medpro_20",
+      "_type": "request",
+      "parentId": "fld_pacientes",
+      "name": "Cadastrar (201 + Location)",
+      "method": "POST",
+      "url": "{{ _.base_url }}/pacientes",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"nome\": \"Paciente Teste\",\n  \"email\": \"paciente.teste@medpro.com\",\n  \"cpf\": \"12345678909\",\n  \"telefone\": \"16999999999\",\n  \"endereco\": {\n    \"logradouro\": \"Rua 1\",\n    \"bairro\": \"Centro\",\n    \"cep\": \"12345678\",\n    \"cidade\": \"São Carlos\",\n    \"uf\": \"SP\",\n    \"numero\": \"1\",\n    \"complemento\": \"Sala 1\"\n  }\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}",
+        "prefix": "Bearer"
+      },
+      "parameters": [],
+      "description": "Ajuste o ID no ambiente; use email/CRM/CPF inéditos ao repetir.",
+      "created": 1795735500703,
+      "modified": 1795735500703,
+      "metaSortKey": 20000
+    },
+    {
+      "_id": "req_medpro_21",
+      "_type": "request",
+      "parentId": "fld_pacientes",
+      "name": "Listar ativos (200)",
+      "method": "GET",
+      "url": "{{ _.base_url }}/pacientes",
+      "body": {},
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}",
+        "prefix": "Bearer"
+      },
+      "parameters": [],
+      "description": "",
+      "created": 1795735500703,
+      "modified": 1795735500703,
+      "metaSortKey": 21000
+    },
+    {
+      "_id": "req_medpro_22",
+      "_type": "request",
+      "parentId": "fld_pacientes",
+      "name": "Paginar e ordenar (200)",
+      "method": "GET",
+      "url": "{{ _.base_url }}/pacientes?size=1&page=0&sort=nome,desc",
+      "body": {},
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}",
+        "prefix": "Bearer"
+      },
+      "parameters": [],
+      "description": "",
+      "created": 1795735500703,
+      "modified": 1795735500703,
+      "metaSortKey": 22000
+    },
+    {
+      "_id": "req_medpro_23",
+      "_type": "request",
+      "parentId": "fld_pacientes",
+      "name": "Detalhar (200)",
+      "method": "GET",
+      "url": "{{ _.base_url }}/pacientes/{{ _.paciente_id }}",
+      "body": {},
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}",
+        "prefix": "Bearer"
+      },
+      "parameters": [],
+      "description": "",
+      "created": 1795735500703,
+      "modified": 1795735500703,
+      "metaSortKey": 23000
+    },
+    {
+      "_id": "req_medpro_24",
+      "_type": "request",
+      "parentId": "fld_pacientes",
+      "name": "Atualizar (200)",
+      "method": "PUT",
+      "url": "{{ _.base_url }}/pacientes",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"id\": 1,\n  \"nome\": \"Nome Atualizado\",\n  \"telefone\": \"16988888888\",\n  \"endereco\": {\n    \"logradouro\": \"Rua Nova\"\n  }\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}",
+        "prefix": "Bearer"
+      },
+      "parameters": [],
+      "description": "Substitua id pelo ID real antes de executar.",
+      "created": 1795735500703,
+      "modified": 1795735500703,
+      "metaSortKey": 24000
+    },
+    {
+      "_id": "req_medpro_25",
+      "_type": "request",
+      "parentId": "fld_pacientes",
+      "name": "ID inexistente (404)",
+      "method": "GET",
+      "url": "{{ _.base_url }}/pacientes/999999999",
+      "body": {},
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}",
+        "prefix": "Bearer"
+      },
+      "parameters": [],
+      "description": "",
+      "created": 1795735500703,
+      "modified": 1795735500703,
+      "metaSortKey": 25000
+    },
+    {
+      "_id": "req_medpro_26",
+      "_type": "request",
+      "parentId": "fld_pacientes",
+      "name": "Cadastro inválido (400)",
+      "method": "POST",
+      "url": "{{ _.base_url }}/pacientes",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"nome\": \"\",\n  \"email\": \"paciente.teste@medpro.com\",\n  \"cpf\": \"12345678909\",\n  \"telefone\": \"16999999999\",\n  \"endereco\": {\n    \"logradouro\": \"Rua 1\",\n    \"bairro\": \"Centro\",\n    \"cep\": \"invalido\",\n    \"cidade\": \"São Carlos\",\n    \"uf\": \"SP\",\n    \"numero\": \"1\",\n    \"complemento\": \"Sala 1\"\n  }\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}",
+        "prefix": "Bearer"
+      },
+      "parameters": [],
+      "description": "",
+      "created": 1795735500703,
+      "modified": 1795735500703,
+      "metaSortKey": 26000
+    },
+    {
+      "_id": "req_medpro_27",
+      "_type": "request",
+      "parentId": "fld_pacientes",
+      "name": "Atualização inválida (400)",
+      "method": "PUT",
+      "url": "{{ _.base_url }}/pacientes",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"id\": 1,\n  \"nome\": \"\"\n}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}",
+        "prefix": "Bearer"
+      },
+      "parameters": [],
+      "description": "Use o ID real.",
+      "created": 1795735500703,
+      "modified": 1795735500703,
+      "metaSortKey": 27000
+    },
+    {
+      "_id": "req_medpro_28",
+      "_type": "request",
+      "parentId": "fld_pacientes",
+      "name": "Sem token (401)",
+      "method": "GET",
+      "url": "{{ _.base_url }}/pacientes",
+      "body": {},
+      "headers": [],
+      "authentication": {},
+      "parameters": [],
+      "description": "",
+      "created": 1795735500703,
+      "modified": 1795735500703,
+      "metaSortKey": 28000
+    },
+    {
+      "_id": "req_medpro_29",
+      "_type": "request",
+      "parentId": "fld_pacientes",
+      "name": "Token inválido (401)",
+      "method": "GET",
+      "url": "{{ _.base_url }}/pacientes",
+      "body": {},
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token_invalido }}",
+        "prefix": "Bearer"
+      },
+      "parameters": [],
+      "description": "",
+      "created": 1795735500703,
+      "modified": 1795735500703,
+      "metaSortKey": 29000
+    },
+    {
+      "_id": "req_medpro_30",
+      "_type": "request",
+      "parentId": "fld_pacientes",
+      "name": "Excluir (204)",
+      "method": "DELETE",
+      "url": "{{ _.base_url }}/pacientes/{{ _.paciente_id }}",
+      "body": {},
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}",
+        "prefix": "Bearer"
+      },
+      "parameters": [],
+      "description": "",
+      "created": 1795735500703,
+      "modified": 1795735500703,
+      "metaSortKey": 30000
+    },
+    {
+      "_id": "req_medpro_31",
+      "_type": "request",
+      "parentId": "fld_pacientes",
+      "name": "Listar após exclusão (200)",
+      "method": "GET",
+      "url": "{{ _.base_url }}/pacientes",
+      "body": {},
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}",
+        "prefix": "Bearer"
+      },
+      "parameters": [],
+      "description": "",
+      "created": 1795735500703,
+      "modified": 1795735500703,
+      "metaSortKey": 31000
+    }
+  ]
+}

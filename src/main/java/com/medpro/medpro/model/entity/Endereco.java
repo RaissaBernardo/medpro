@@ -42,8 +42,8 @@ public class Endereco {
             else this.bairro = dados.bairro();
         }
         if (dados.cep() != null) {
-            if (dados.cep().isBlank())
-                throw new IllegalArgumentException("CEP não pode estar em branco.");
+            if (!dados.cep().matches("\\d{5}-?\\d{3}"))
+                throw new IllegalArgumentException("CEP inválido.");
             else this.cep = dados.cep();
         }
         if (dados.cidade() != null) {
@@ -52,8 +52,8 @@ public class Endereco {
             else this.cidade = dados.cidade();
         }
         if (dados.estado() != null) {
-            if (dados.estado().isBlank())
-                throw new IllegalArgumentException("Estado não pode estar em branco.");
+            if (!dados.estado().matches("[A-Za-z]{2}"))
+                throw new IllegalArgumentException("Estado deve conter duas letras.");
             else this.estado = dados.estado();
         }
         if (dados.numero() != null) this.numero = dados.numero();

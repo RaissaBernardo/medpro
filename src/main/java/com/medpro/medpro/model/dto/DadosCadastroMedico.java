@@ -2,6 +2,7 @@ package com.medpro.medpro.model.dto;
 
 import com.medpro.medpro.enums.Especialidade;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -12,7 +13,7 @@ public record DadosCadastroMedico(
     @NotBlank @Email String email,
     @NotBlank @Pattern(regexp = "\\d{4,6}") String crm,
     @NotNull Especialidade especialidade,
-    @NotNull DadosEndereco endereco,
+    @NotNull @Valid DadosEndereco endereco,
     @NotBlank String telefone
 ) {
     
