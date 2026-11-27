@@ -1,0 +1,14 @@
+create table consultas (
+    id bigint not null auto_increment,
+    paciente_id bigint not null,
+    medico_id bigint not null,
+    data datetime(6) not null,
+    motivo_cancelamento varchar(30),
+    primary key (id),
+    constraint fk_consulta_paciente foreign key (paciente_id) references pacientes(id),
+    constraint fk_consulta_medico foreign key (medico_id) references medicos(id),
+    constraint ck_consulta_motivo check (motivo_cancelamento in ('PACIENTE_DESISTIU', 'MEDICO_CANCELOU', 'OUTROS'))
+);
+
+create index idx_consulta_paciente_data on consultas (paciente_id, data);
+create index idx_consulta_medico_data on consultas (medico_id, data);

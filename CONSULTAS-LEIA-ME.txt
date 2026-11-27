@@ -1,0 +1,66 @@
+MEDPRO - MÓDULO DE CONSULTAS
+
+O projeto original foi preservado: não foram alterados pom.xml, Dockerfile,
+application.properties, application-prod.properties, credenciais, JWT, CRUDs,
+coleção do Insomnia original ou migrations V1 a V7 de nenhum dos bancos.
+Foi acrescentada V8__create-table-consultas.sql em cada diretório Flyway.
+
+REGRAS
+- A clínica funciona de segunda a sábado, 07:00–19:00. A última consulta começa
+  às 18:00 para terminar às 19:00.
+- Duração fixa de uma hora, com rejeição de intervalos sobrepostos, inclusive
+  horários parcialmente coincidentes.
+- Agendamento com antecedência de pelo menos 30 minutos.
+- Paciente obrigatório e ativo; médico, se informado, deve existir e estar ativo.
+- No máximo uma consulta não cancelada por dia para cada paciente.
+- Sem médico informado, sorteia um dos médicos ativos e disponíveis.
+- Cancelamento exige motivo PACIENTE_DESISTIU, MEDICO_CANCELOU ou OUTROS e
+  antecedência de pelo menos 24 horas. Mantém o registro no banco e libera o horário.
+- Rejeita cancelamento repetido. As consultas utilizam a hora local de São Paulo
+  (America/Sao_Paulo), inclusive no Render; envie data sem offset no formato ISO.
+- Agendamento transacional utiliza bloqueios pessimistas no paciente e no médico
+  para impedir conflitos entre agendamentos simultâneos. Consultas canceladas
+  não participam da verificação de disponibilidade.
+
+ENDPOINTS (todos exigem Bearer Token JWT)
+POST /consultas -> 201 Created + Location + detalhamento.
+GET /consultas/{id} -> 200 OK com detalhamento (inclui motivo se cancelada).
+DELETE /consultas -> 204 No Content, com ID e motivo no corpo JSON.
+Erros de validação e regras de negócio -> 400; ID inexistente -> 404;
+sem autenticação ou token inválido -> 401, conforme tratador existente.
+
+EXEMPLOS (ajuste os IDs e as datas para registros existentes e horários futuros)
+POST /consultas
+{"idPaciente":1,"idMedico":1,"data":"2026-12-01T10:00:00"}
+POST /consultas (médico automático)
+{"idPaciente":2,"data":"2026-12-01T11:00:00"}
+DELETE /consultas
+{"idConsulta":1,"motivo":"PACIENTE_DESISTIU"}
+
+COMO EXECUTAR
+1. Copie o conteúdo deste ZIP para a pasta de trabalho já clonada do seu GitHub,
+   preservando a pasta .git que existe no seu computador. O ZIP não inclui .git
+   nem target. Nenhum arquivo original de código/configuração foi modificado.
+2. Inicie o MySQL. Mantenha as configurações originais de credenciais locais.
+   No PowerShell, se necessário configure JWT_SECRET (já usado no projeto):
+   $env:JWT_SECRET = [guid]::NewGuid().ToString() + [guid]::NewGuid().ToString()
+3. .\mvnw.cmd clean test
+4. .\mvnw.cmd spring-boot:run
+5. Importe Insomnia_Consultas.json, ajuste base_url, token, IDs e datas no ambiente.
+   Use http://localhost:8080 para testar local ou a URL do Render para testar online.
+   Faça login pela coleção original e copie o token para a nova coleção.
+6. git add .
+   git commit -m "Implementa agendamento e cancelamento de consultas"
+   git push origin main
+7. O Render fará o deploy automático, se habilitado, ou use Manual Deploy > Deploy
+   latest commit. A V8 deve ser aplicada automaticamente no PostgreSQL; não é
+   preciso alterar nenhuma variável de ambiente nem recriar o banco.
+
+TESTES
+Foram adicionados 17 testes unitários de regras de negócio, usando Mockito e
+horário fixo, além dos 5 testes originais preservados. Os testes novos não foram
+executados no ambiente de geração, que só dispõe de Java 21 e não tem Maven
+ou acesso ao repositório Maven Central. Valide com Java 25 no seu computador.
+A coleção do Insomnia inclui exemplos de sucesso e erros. Para verificar regras
+que exigem um médico/paciente inativo ou uma consulta preexistente, prepare os
+registros correspondentes antes de executar a requisição.

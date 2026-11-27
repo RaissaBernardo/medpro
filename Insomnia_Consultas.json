@@ -1,0 +1,578 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2026-11-26T00:00:00.000Z",
+  "__export_source": "insomnia.desktop.app:v2026",
+  "resources": [
+    {
+      "_id": "wrk_medpro_consultas",
+      "_type": "workspace",
+      "name": "MedPro — Consultas",
+      "scope": "collection",
+      "parentId": null,
+      "created": 1795743463379,
+      "modified": 1795743463379
+    },
+    {
+      "_id": "env_medpro_consultas",
+      "_type": "environment",
+      "name": "Base Environment",
+      "parentId": "wrk_medpro_consultas",
+      "data": {
+        "base_url": "http://localhost:8080",
+        "token": "",
+        "id_paciente": 1,
+        "id_paciente_2": 2,
+        "id_medico": 1,
+        "id_consulta": 1,
+        "data_consulta": "2026-12-01T10:00:00",
+        "data_consulta_2": "2026-12-01T10:30:00",
+        "data_domingo": "2026-12-06T10:00:00",
+        "data_fora_horario": "2026-12-01T18:30:00",
+        "data_sem_antecedencia": "2020-01-01T10:00:00"
+      },
+      "created": 1795743463379,
+      "modified": 1795743463379
+    },
+    {
+      "_id": "fld_consultas",
+      "_type": "request_group",
+      "parentId": "wrk_medpro_consultas",
+      "name": "Consultas — testes",
+      "created": 1795743463379,
+      "modified": 1795743463379
+    },
+    {
+      "_id": "req_consultas_3",
+      "_type": "request",
+      "parentId": "fld_consultas",
+      "name": "Agendar com médico (201)",
+      "method": "POST",
+      "url": "{{ _.base_url }}/consultas",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"idPaciente\": {{ _.id_paciente }}, \"idMedico\": {{ _.id_medico }}, \"data\": \"{{ _.data_consulta }}\"}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}",
+        "prefix": "Bearer"
+      },
+      "parameters": [],
+      "description": "Use paciente e médico ativos e livres, data futura com mais de 24h para testar cancelamento. Copie o ID retornado para id_consulta.",
+      "created": 1795743463379,
+      "modified": 1795743463379,
+      "metaSortKey": 3000
+    },
+    {
+      "_id": "req_consultas_4",
+      "_type": "request",
+      "parentId": "fld_consultas",
+      "name": "Detalhar (200)",
+      "method": "GET",
+      "url": "{{ _.base_url }}/consultas/{{ _.id_consulta }}",
+      "body": {},
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}",
+        "prefix": "Bearer"
+      },
+      "parameters": [],
+      "description": "",
+      "created": 1795743463379,
+      "modified": 1795743463379,
+      "metaSortKey": 4000
+    },
+    {
+      "_id": "req_consultas_5",
+      "_type": "request",
+      "parentId": "fld_consultas",
+      "name": "Repetir paciente no dia (400)",
+      "method": "POST",
+      "url": "{{ _.base_url }}/consultas",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"idPaciente\": {{ _.id_paciente }}, \"idMedico\": {{ _.id_medico }}, \"data\": \"{{ _.data_consulta }}\"}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}",
+        "prefix": "Bearer"
+      },
+      "parameters": [],
+      "description": "Execute após agendamento bem-sucedido e antes do cancelamento.",
+      "created": 1795743463379,
+      "modified": 1795743463379,
+      "metaSortKey": 5000
+    },
+    {
+      "_id": "req_consultas_6",
+      "_type": "request",
+      "parentId": "fld_consultas",
+      "name": "Conflito parcial de médico (400)",
+      "method": "POST",
+      "url": "{{ _.base_url }}/consultas",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"idPaciente\": {{ _.id_paciente_2 }}, \"idMedico\": {{ _.id_medico }}, \"data\": \"{{ _.data_consulta_2 }}\"}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}",
+        "prefix": "Bearer"
+      },
+      "parameters": [],
+      "description": "Use outro paciente ativo, mesmo médico e intervalo sobreposto.",
+      "created": 1795743463379,
+      "modified": 1795743463379,
+      "metaSortKey": 6000
+    },
+    {
+      "_id": "req_consultas_7",
+      "_type": "request",
+      "parentId": "fld_consultas",
+      "name": "Agendar médico automático (201)",
+      "method": "POST",
+      "url": "{{ _.base_url }}/consultas",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"idPaciente\": {{ _.id_paciente_2 }}, \"data\": \"{{ _.data_consulta_2 }}\"}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}",
+        "prefix": "Bearer"
+      },
+      "parameters": [],
+      "description": "Escolhe um médico ativo e livre; exige que haja outro médico disponível. Ajuste a data conforme necessário.",
+      "created": 1795743463379,
+      "modified": 1795743463379,
+      "metaSortKey": 7000
+    },
+    {
+      "_id": "req_consultas_8",
+      "_type": "request",
+      "parentId": "fld_consultas",
+      "name": "Domingo (400)",
+      "method": "POST",
+      "url": "{{ _.base_url }}/consultas",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"idPaciente\": {{ _.id_paciente }}, \"idMedico\": {{ _.id_medico }}, \"data\": \"{{ _.data_domingo }}\"}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}",
+        "prefix": "Bearer"
+      },
+      "parameters": [],
+      "description": "",
+      "created": 1795743463379,
+      "modified": 1795743463379,
+      "metaSortKey": 8000
+    },
+    {
+      "_id": "req_consultas_9",
+      "_type": "request",
+      "parentId": "fld_consultas",
+      "name": "Fora do expediente (400)",
+      "method": "POST",
+      "url": "{{ _.base_url }}/consultas",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"idPaciente\": {{ _.id_paciente }}, \"idMedico\": {{ _.id_medico }}, \"data\": \"{{ _.data_fora_horario }}\"}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}",
+        "prefix": "Bearer"
+      },
+      "parameters": [],
+      "description": "",
+      "created": 1795743463379,
+      "modified": 1795743463379,
+      "metaSortKey": 9000
+    },
+    {
+      "_id": "req_consultas_10",
+      "_type": "request",
+      "parentId": "fld_consultas",
+      "name": "Sem antecedência (400)",
+      "method": "POST",
+      "url": "{{ _.base_url }}/consultas",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"idPaciente\": {{ _.id_paciente }}, \"idMedico\": {{ _.id_medico }}, \"data\": \"{{ _.data_sem_antecedencia }}\"}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}",
+        "prefix": "Bearer"
+      },
+      "parameters": [],
+      "description": "",
+      "created": 1795743463379,
+      "modified": 1795743463379,
+      "metaSortKey": 10000
+    },
+    {
+      "_id": "req_consultas_11",
+      "_type": "request",
+      "parentId": "fld_consultas",
+      "name": "Paciente inexistente (404)",
+      "method": "POST",
+      "url": "{{ _.base_url }}/consultas",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"idPaciente\": 99999999, \"idMedico\": {{ _.id_medico }}, \"data\": \"{{ _.data_consulta }}\"}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}",
+        "prefix": "Bearer"
+      },
+      "parameters": [],
+      "description": "",
+      "created": 1795743463379,
+      "modified": 1795743463379,
+      "metaSortKey": 11000
+    },
+    {
+      "_id": "req_consultas_12",
+      "_type": "request",
+      "parentId": "fld_consultas",
+      "name": "Sem paciente (400)",
+      "method": "POST",
+      "url": "{{ _.base_url }}/consultas",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"data\":\"{{ _.data_consulta }}\"}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}",
+        "prefix": "Bearer"
+      },
+      "parameters": [],
+      "description": "",
+      "created": 1795743463379,
+      "modified": 1795743463379,
+      "metaSortKey": 12000
+    },
+    {
+      "_id": "req_consultas_13",
+      "_type": "request",
+      "parentId": "fld_consultas",
+      "name": "Sem token (401)",
+      "method": "GET",
+      "url": "{{ _.base_url }}/consultas/{{ _.id_consulta }}",
+      "body": {},
+      "headers": [],
+      "authentication": {},
+      "parameters": [],
+      "description": "",
+      "created": 1795743463379,
+      "modified": 1795743463379,
+      "metaSortKey": 13000
+    },
+    {
+      "_id": "req_consultas_14",
+      "_type": "request",
+      "parentId": "fld_consultas",
+      "name": "Cancelamento sem motivo (400)",
+      "method": "DELETE",
+      "url": "{{ _.base_url }}/consultas",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"idConsulta\": {{ _.id_consulta }}}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}",
+        "prefix": "Bearer"
+      },
+      "parameters": [],
+      "description": "",
+      "created": 1795743463379,
+      "modified": 1795743463379,
+      "metaSortKey": 14000
+    },
+    {
+      "_id": "req_consultas_15",
+      "_type": "request",
+      "parentId": "fld_consultas",
+      "name": "Cancelamento motivo inválido (400)",
+      "method": "DELETE",
+      "url": "{{ _.base_url }}/consultas",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"idConsulta\": {{ _.id_consulta }}, \"motivo\":\"INVALIDO\"}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}",
+        "prefix": "Bearer"
+      },
+      "parameters": [],
+      "description": "",
+      "created": 1795743463379,
+      "modified": 1795743463379,
+      "metaSortKey": 15000
+    },
+    {
+      "_id": "req_consultas_16",
+      "_type": "request",
+      "parentId": "fld_consultas",
+      "name": "Cancelar (204)",
+      "method": "DELETE",
+      "url": "{{ _.base_url }}/consultas",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"idConsulta\": {{ _.id_consulta }}, \"motivo\":\"PACIENTE_DESISTIU\"}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}",
+        "prefix": "Bearer"
+      },
+      "parameters": [],
+      "description": "Consulta deve estar a pelo menos 24 horas no futuro.",
+      "created": 1795743463379,
+      "modified": 1795743463379,
+      "metaSortKey": 16000
+    },
+    {
+      "_id": "req_consultas_17",
+      "_type": "request",
+      "parentId": "fld_consultas",
+      "name": "Detalhar cancelada (200)",
+      "method": "GET",
+      "url": "{{ _.base_url }}/consultas/{{ _.id_consulta }}",
+      "body": {},
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}",
+        "prefix": "Bearer"
+      },
+      "parameters": [],
+      "description": "Verifique motivoCancelamento no retorno.",
+      "created": 1795743463379,
+      "modified": 1795743463379,
+      "metaSortKey": 17000
+    },
+    {
+      "_id": "req_consultas_18",
+      "_type": "request",
+      "parentId": "fld_consultas",
+      "name": "Cancelar novamente (400)",
+      "method": "DELETE",
+      "url": "{{ _.base_url }}/consultas",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"idConsulta\": {{ _.id_consulta }}, \"motivo\":\"OUTROS\"}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}",
+        "prefix": "Bearer"
+      },
+      "parameters": [],
+      "description": "",
+      "created": 1795743463379,
+      "modified": 1795743463379,
+      "metaSortKey": 18000
+    },
+    {
+      "_id": "req_consultas_19",
+      "_type": "request",
+      "parentId": "fld_consultas",
+      "name": "Cancelar com menos de 24h (400)",
+      "method": "DELETE",
+      "url": "{{ _.base_url }}/consultas",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"idConsulta\": {{ _.id_consulta }}, \"motivo\":\"MEDICO_CANCELOU\"}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}",
+        "prefix": "Bearer"
+      },
+      "parameters": [],
+      "description": "Crie consulta com antecedência entre 30 minutos e 24 horas e ajuste id_consulta.",
+      "created": 1795743463379,
+      "modified": 1795743463379,
+      "metaSortKey": 19000
+    },
+    {
+      "_id": "req_consultas_20",
+      "_type": "request",
+      "parentId": "fld_consultas",
+      "name": "Paciente inativo (400)",
+      "method": "POST",
+      "url": "{{ _.base_url }}/consultas",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"idPaciente\": {{ _.id_paciente }}, \"idMedico\": {{ _.id_medico }}, \"data\": \"{{ _.data_consulta }}\"}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}",
+        "prefix": "Bearer"
+      },
+      "parameters": [],
+      "description": "Use ID de paciente previamente inativado.",
+      "created": 1795743463379,
+      "modified": 1795743463379,
+      "metaSortKey": 20000
+    },
+    {
+      "_id": "req_consultas_21",
+      "_type": "request",
+      "parentId": "fld_consultas",
+      "name": "Médico inativo (400)",
+      "method": "POST",
+      "url": "{{ _.base_url }}/consultas",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"idPaciente\": {{ _.id_paciente }}, \"idMedico\": {{ _.id_medico }}, \"data\": \"{{ _.data_consulta }}\"}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}",
+        "prefix": "Bearer"
+      },
+      "parameters": [],
+      "description": "Use paciente ativo sem consulta no dia e ID de médico previamente inativado.",
+      "created": 1795743463379,
+      "modified": 1795743463379,
+      "metaSortKey": 21000
+    },
+    {
+      "_id": "req_consultas_22",
+      "_type": "request",
+      "parentId": "fld_consultas",
+      "name": "Nenhum médico disponível (400)",
+      "method": "POST",
+      "url": "{{ _.base_url }}/consultas",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\"idPaciente\": {{ _.id_paciente }}, \"data\": \"{{ _.data_consulta }}\"}"
+      },
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.token }}",
+        "prefix": "Bearer"
+      },
+      "parameters": [],
+      "description": "Prepare cenário sem médicos ativos livres e paciente ativo sem consulta no dia.",
+      "created": 1795743463379,
+      "modified": 1795743463379,
+      "metaSortKey": 22000
+    }
+  ]
+}
